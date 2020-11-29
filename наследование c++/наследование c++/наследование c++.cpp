@@ -219,7 +219,7 @@ public:
 	{
 		return count;
 	}
-	void OutputCars()// функкция вывода данных
+	void PrintT()// функкция вывода данных
 	{
 		cout << endl << "Марка: " << name << endl;
 		cout << "Цвет: " << color << endl;
@@ -228,7 +228,7 @@ public:
 		printf("%.4lf\n", price);
 		cout<< "Количество: " << count << endl;
 	}
-	void PutCars()// функция ввода данных
+	void ReadT()// функция ввода данных
 	{
 		fflush(stdin);
 		cout << "Марка: ";
@@ -248,10 +248,11 @@ public:
 		cin >> count;
 		if (count <= 0) throw exception("Введено неккоректное количество!!!");
 	}
-	void Sell()
+	int Sell()
 	{
 		count--;
 		cout << "Техника продана!" << endl;
+		cout << "текущее количество: " << count << endl;
 	}
 };
 
@@ -274,15 +275,17 @@ public:
 	}
 	void Read()
 	{
-		PutCars();
-		cout << endl << "время разгона до сотни: ";
+		cout << "машина:" << endl;
+		ReadT();
+		cout << "время разгона до сотни: ";
 		cin >> timeToHundred;
 		if (timeToHundred<0 || timeToHundred>100000) throw exception("Введено неккоректное время!!!");
 		dvs.Read();
 	}
 	void Print()
 	{
-		OutputCars();
+		cout << "машина:" << endl;
+		PrintT();
 		cout << "Время разгона до сотни: " << timeToHundred << " секунд" << endl;
 		dvs.Print();
 	}
@@ -309,19 +312,58 @@ void cars::Drive(cars *avto, int km)// возврат значений через указатель
 	avto->dvs.SetProbeg(ProbegAfterDrive);
 }
 
+class plane:public technika// производный класс "самолет" от класса "техника"
+{
+private:
+	double MaxLength;// максимальная высота полета (в метрах)
+	double HourFly;// налет в часах
+public:
+	plane()
+	{
+		MaxLength = 10000;
+		HourFly = 0;
+	}
+	plane(double maxlength, double hourfly, int year, string name, string color, double price, int count) :technika(year,
+		name, color, price, count)
+	{
+		MaxLength = maxlength;
+		HourFly = hourfly;
+	}
+	void Read()
+	{
+		cout << "самолет:" << endl;
+		ReadT();
+		cout << "максимальная высота полета: ";
+		cin >> MaxLength;
+		cout << "время налета (в часах): ";
+		cin >> HourFly;
+	}
+	void Print()
+	{
+		cout << "самолет:" << endl;
+		PrintT();
+		cout << "максимальная высота полета: " << MaxLength << endl;
+		cout << "время налета: " << HourFly << "часов(а)" << endl;
+	}
+	double Fly(double hour)// функция полета на определенное количество часов
+	{
+		if (hour < 0) throw exception("неккоректная продолжительность полета!");
+		HourFly += hour;
+		return HourFly;
+	}
+};
 int _tmain(int argc, _TCHAR* argv[])
 {
 	SetConsoleCP(1251);// подключение русскоязычного ввода/вывода
 	SetConsoleOutputCP(1251);
-	system("color F0");
+	//класс машина:
 	engine dvs("св-01", 10, 100, 0, 400);
 	cars avto(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
-	cout << "машина 1:";
 	avto.Print();
 	bool f;
 	do{
 		f = false;
-		try{ avto.PutCars(); }
+		try{ avto.Read(); }
 		catch (exception &ex)
 		{
 			cout << "Ошибка ввода: " << ex.what() << endl;
@@ -353,6 +395,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	printf("\nПосле модернизации:");
 	avto.Print();
+	avto.Sell();
+	//класс самолет
 	getch();
 	return 0;
 }
