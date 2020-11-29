@@ -219,7 +219,7 @@ public:
 	{
 		return count;
 	}
-	void PrintT()// функкция вывода данных
+	void Print()// функкция вывода данных
 	{
 		cout << endl << "Марка: " << name << endl;
 		cout << "Цвет: " << color << endl;
@@ -228,7 +228,7 @@ public:
 		printf("%.4lf\n", price);
 		cout<< "Количество: " << count << endl;
 	}
-	void ReadT()// функция ввода данных
+	void Read()// функция ввода данных
 	{
 		fflush(stdin);
 		cout << "Марка: ";
@@ -284,7 +284,7 @@ public:
 	void Read()
 	{
 		cout << "машина:" << endl;
-		ReadT();
+		technika::Read();
 		cout << "время разгона до сотни: ";
 		cin >> timeToHundred;
 		if (timeToHundred<0 || timeToHundred>100000) throw exception("Введено неккоректное время!!!");
@@ -293,7 +293,7 @@ public:
 	void Print()
 	{
 		cout << "машина:" << endl;
-		PrintT();
+		technika::Print();
 		cout << "Время разгона до сотни: " << timeToHundred << " секунд" << endl;
 		dvs.Print();
 	}
@@ -307,17 +307,25 @@ public:
 		dvs.SetResurs(NewResurs);
 		dvs.Remont();
 	}
-	void Drive(cars *avto, int km);
+	int Sell(int count)// перегрузка метода базового класса
+	{
+		if (this->count < count) throw exception("неккоректное количество продаваемых машин!");
+		this->count -= count;
+		cout << "Техника продана!" << endl;
+		cout << "текущее количество: " << this->count << endl;
+	}
+	int Drive(cars *avto, int km);
 };
 
 
-void cars::Drive(cars *avto, int km)// возврат значений через указатель
+int cars::Drive(cars *avto, int km)// возврат значений через указатель
 {
 	if (km<1) throw MyException("Ошибка, некорректное расстояние тест-драйва!", 0);
 	if (km>100)throw MyException("Ошибка, некорректное расстояние тест-драйва!", 1);
 	int ProbegAfterDrive;
 	ProbegAfterDrive = avto->dvs.GetProbeg() + km;
 	avto->dvs.SetProbeg(ProbegAfterDrive);
+	return ProbegAfterDrive;
 }
 
 class plane:public technika// производный класс "самолет" от класса "техника"
@@ -356,7 +364,7 @@ public:
 	void Read()
 	{
 		cout << "самолет:" << endl;
-		ReadT();
+		technika::Read();
 		cout << "максимальная высота полета: ";
 		cin >> MaxHeight;
 		cout << "время налета (в часах): ";
@@ -365,7 +373,7 @@ public:
 	void Print()
 	{
 		cout << "самолет:" << endl;
-		PrintT();
+		technika::Print();
 		cout << "максимальная высота полета: " << MaxHeight << endl;
 		cout << "время налета: " << HourFly << "часов(а)" << endl;
 	}
@@ -397,7 +405,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	} while (f);
 	printf("\nДанные после ввода:");
 	avto.Print();
-	try{ avto.Drive(&avto, 10); }
+	int probeg=0;
+	try{ probeg = avto.Drive(&avto, 10); }
 	catch (MyException &ex)
 	{
 		cout << ex.what() << endl;
@@ -406,8 +415,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
-	printf("\nПосле тест-драйва:");
-	avto.Print();
+	printf("\nПробег после тест-драйва: ");
+	cout << probeg << endl;
 	try{ avto.Modern(100, 200, 500); }
 	catch (MyException &ex)
 	{
@@ -419,7 +428,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	printf("\nПосле модернизации:");
 	avto.Print();
-	avto.Sell();
+	avto.technika::Sell();// вызов перегруженного метода базового класса
+	try{ avto.Sell(5); }
+	catch (exception &ex)
+	{
+		cout << ex.what() << endl;
+		cout << "завершение работы программы!";
+		getch();
+		exit(1);
+	}
 	//класс самолет
 	plane pl(20000, 0, 2020, "No_Name", "No_Color", 150000, 5);
 	pl.Print();
