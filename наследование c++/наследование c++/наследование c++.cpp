@@ -273,6 +273,14 @@ public:
 		this->dvs = dvs;//установка двигателя
 		this->timeToHundred = time;
 	}
+	void SetTime(double time)
+	{
+		this->timeToHundred = time;
+	}
+	double GetTime()
+	{
+		return timeToHundred;
+	}
 	void Read()
 	{
 		cout << "машина:" << endl;
@@ -315,26 +323,42 @@ void cars::Drive(cars *avto, int km)// возврат значений через указатель
 class plane:public technika// производный класс "самолет" от класса "техника"
 {
 private:
-	double MaxLength;// максимальная высота полета (в метрах)
+	double MaxHeight;// максимальная высота полета (в метрах)
 	double HourFly;// налет в часах
 public:
 	plane()
 	{
-		MaxLength = 10000;
+		MaxHeight = 10000;
 		HourFly = 0;
 	}
 	plane(double maxlength, double hourfly, int year, string name, string color, double price, int count) :technika(year,
 		name, color, price, count)
 	{
-		MaxLength = maxlength;
+		MaxHeight = maxlength;
 		HourFly = hourfly;
+	}
+	void SetHeight(double height)
+	{
+		this->MaxHeight = height;
+	}
+	void SetHourFly(double hour)
+	{
+		this->HourFly = hour;
+	}
+	double GetHeight()
+	{
+		return MaxHeight;
+	}
+	double GetHour()
+	{
+		return HourFly;
 	}
 	void Read()
 	{
 		cout << "самолет:" << endl;
 		ReadT();
 		cout << "максимальная высота полета: ";
-		cin >> MaxLength;
+		cin >> MaxHeight;
 		cout << "время налета (в часах): ";
 		cin >> HourFly;
 	}
@@ -342,7 +366,7 @@ public:
 	{
 		cout << "самолет:" << endl;
 		PrintT();
-		cout << "максимальная высота полета: " << MaxLength << endl;
+		cout << "максимальная высота полета: " << MaxHeight << endl;
 		cout << "время налета: " << HourFly << "часов(а)" << endl;
 	}
 	double Fly(double hour)// функция полета на определенное количество часов
