@@ -331,10 +331,10 @@ public:
 		MaxHeight = 10000;
 		HourFly = 0;
 	}
-	plane(double maxlength, double hourfly, int year, string name, string color, double price, int count) :technika(year,
+	plane(double maxheight, double hourfly, int year, string name, string color, double price, int count) :technika(year,
 		name, color, price, count)
 	{
-		MaxHeight = maxlength;
+		MaxHeight = maxheight;
 		HourFly = hourfly;
 	}
 	void SetHeight(double height)
@@ -421,6 +421,30 @@ int _tmain(int argc, _TCHAR* argv[])
 	avto.Print();
 	avto.Sell();
 	//класс самолет
+	plane pl(20000, 0, 2020, "No_Name", "No_Color", 150000, 5);
+	pl.Print();
+	do{
+		f = false;
+		try{ pl.Read(); }
+		catch (exception &ex)
+		{
+			cout << "Ошибка ввода: " << ex.what() << endl;
+			cout << "Повторите попытку ввода!" << endl;
+			f = true;
+		}
+	} while (f);
+	printf("\nДанные после ввода:");
+	pl.Print();
+	try{  pl.Fly(1); }
+	catch (exception &ex)
+	{
+		cout << ex.what() << endl;
+		cout << "завершение работы программы!";
+		getch();
+		exit(1);
+	}
+	cout << "Налет (в часах) после полета: " << pl.GetHour() << endl;
+	pl.Sell();
 	getch();
 	return 0;
 }
