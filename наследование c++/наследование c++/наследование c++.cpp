@@ -26,7 +26,7 @@ public:
 class engine// двигатель
 {
 private:
-	int *power;// мощность (л.с.)
+	int power;// мощность (л.с.)
 	string name;// марка двигателя
 	double weight;// вес
 	int probeg;// пробег
@@ -34,48 +34,34 @@ private:
 public:
 	engine &operator=(const engine &other)// перегрузка опрератора =
 	{
-		if (power != nullptr)// проверка на не нулевое значение указателя
-			delete power;
-		power = new int;
-		*this->power = *other.power;
+		this->power = other.power;
 		this->name = other.name;
 		this->weight = other.weight;
 		this->probeg = other.probeg;
 		this->resurs = other.resurs;
 		return *this;
 	}
-	engine(const engine &other)// конструктор с мелким копированием
-	{
-		this->power = other.power;// мелкое копирование адреса одинаковые
-		this->name = other.name;
-		this->weight = other.weight;
-		this->probeg = other.probeg;
-		this->resurs = other.resurs;
-	}
 	engine(string init_name, double weight, int power, int probeg, int resurs)// конструктор с параметрами
 	{
-		this->power = new int;
 		this->name = init_name;
 		this->weight = weight;
-		*this->power = power;
+		this->power = power;
 		this->probeg = probeg;
 		this->resurs = resurs;
 	}
 	engine(string name)
 	{
-		this->power = new int;
 		this->name = name;
 		this->weight = 50;
-		*this->power = 100;
+		this->power = 100;
 		this->probeg = 0;
 		this->resurs = 100;
 	}
 	engine()// конструктор без параметров
 	{
-		this->power = new int;
 		name = "No_Name";
 		weight = 10;
-		*power = 100;
+		power = 100;
 		probeg = 0;
 		resurs = 300;
 	}
@@ -91,7 +77,7 @@ public:
 	}
 	void SetPower(int power)
 	{
-		*this->power = power;
+		this->power = power;
 	}
 	void SetProbeg(int probeg)
 	{
@@ -111,7 +97,7 @@ public:
 	}
 	int GetPower()
 	{
-		return *power;
+		return power;
 	}
 	int GetProbeg()
 	{
@@ -135,8 +121,8 @@ public:
 		cin >> weight;
 		if (weight <10 || weight>5000) throw exception("Введен неккоректный вес двигателя!!!");
 		cout << "Мощность двигателя: ";
-		cin >> *power;
-		if (*power <10 || *power>1500) throw exception("Введена неккоректная мощность двигателя!!!");
+		cin >> power;
+		if (power <10 || power>1500) throw exception("Введена неккоректная мощность двигателя!!!");
 		cout << "Пробег двигателя: ";
 		cin >> probeg;
 		if (probeg <0 || probeg>1000000) throw exception("Введен неккоректный пробег!!!");
@@ -147,7 +133,7 @@ public:
 	void Print()// вывод данных
 	{
 		cout << "Марка двигателя: " << name << endl;
-		cout << "Мощность двигателя: " << *power << endl;
+		cout << "Мощность двигателя: " << power << endl;
 		cout << "Пробег двигателя: " << probeg << endl;
 		cout << "Ресурс двигателя: " << resurs << endl;
 		cout << "Масса двигателя: ";
@@ -158,50 +144,39 @@ public:
 
 	}
 };
-class cars// класс авто
+class technika// родительский класс всей техники
 {
-public:
-	int *year;// год выпуска
-	string name;// марка авто
-	string color;// цвет авто
+protected:
+	int year;// год выпуска
+	string name;// марка техники
+	string color;// цвет техники
 	double price;// цена
-	engine dvs;// двигатель
+	int count;
 public:
-	cars(const cars &other)// коннструктор с глубоким копированием
+	technika(const technika &other)
 	{
-		this->year = new int;
-		*this->year = *other.year;
+		this->year = other.year;
 		this->name = other.name;
 		this->color = other.color;
 		this->price = other.price;
-		this->dvs = other.dvs;// перегрузка оператора присваивания
+		this->count = other.count;
 
 	}
-	cars(int year, string name, string color, double price, engine &dvs)// конструктор с параметрами
+	technika(int year, string name, string color, double price, int count)// конструктор с параметрами
 	{
-		this->year = new int;
 		this->name = name;
 		this->color = color;
-		*this->year = year;
+		this->year = year;
 		this->price = price;
-		this->dvs = dvs;//установка двигателя
+		this->count = count;
 	}
-	cars(int price)// конструктор с одним параметром
+	technika()// конструктор без параметров
 	{
-		this->year = new int;
-		this->name = "No_Name";
-		this->color = "No_Color";
-		*(this->year) = 2020;
-		this->price = price;
-	}
-	cars()// конструктор без параметров
-	{
-		this->year = new int;
 		name = "No_Name";
 		color = "No_Color";
-		*year = 2020;
+		year = 2020;
 		price = 1000;
-
+		count = 0;
 	}
 	// сеттеры и геттеры
 	void SetName(string name)
@@ -214,11 +189,15 @@ public:
 	}
 	void SetYear(int year)
 	{
-		*this->year = year;
+		this->year = year;
 	}
 	void SetPrice(double price)
 	{
 		this->price = price;
+	}
+	void SetCount(int count)
+	{
+		this->count = count;
 	}
 	string GetName()
 	{
@@ -230,39 +209,82 @@ public:
 	}
 	int GetYear()
 	{
-		return *year;
+		return year;
 	}
 	double GetPrice()
 	{
 		return price;
 	}
+	int GetCount()
+	{
+		return count;
+	}
 	void OutputCars()// функкция вывода данных
 	{
-		cout << endl << "Марка машины: " << name << endl;
-		cout << "Цвет машины: " << color << endl;
-		cout << "Год выпуска: " << *year << endl;
-		cout << "Цена машины: ";
+		cout << endl << "Марка: " << name << endl;
+		cout << "Цвет: " << color << endl;
+		cout << "Год выпуска: " << year << endl;
+		cout << "Цена: ";
 		printf("%.4lf\n", price);
-		dvs.Print();
+		cout<< "Количество: " << count << endl;
 	}
 	void PutCars()// функция ввода данных
 	{
 		fflush(stdin);
-		cout << endl << " Ввод данных" << endl;
-		cout << "Марка машины: ";
+		cout << "Марка: ";
 		getline(cin, name);
-		if (name == "") throw exception("Введена пустая строка марки авто!!!");
+		if (name == "") throw exception("Введена пустая строка марки!!!");
 		fflush(stdin);
-		cout << "Цвет машины: ";
+		cout << "Цвет: ";
 		getline(cin, color);
-		if (color == "") throw exception("Введена пустая строка цвета авто!!!");
-		cout << "Год выпуска машины: ";
-		cin >> *year;
-		if (*year<2000 || *year>2020) throw exception("Введен неккоректный год выпуска авто!!!");
+		if (color == "") throw exception("Введена пустая строка цвета!!!");
+		cout << "Год выпуска: ";
+		cin >> year;
+		if (year<2000 || year>2020) throw exception("Введен неккоректный год выпуска!!!");
 		cout << "Цена: ";
 		cin >> price;
-		if (price <= 0) throw exception("Введена неккоректная цена авто!!!");
+		if (price <= 0) throw exception("Введена неккоректная цена!!!");
+		cout << "Количесвто: ";
+		cin >> count;
+		if (count <= 0) throw exception("Введено неккоректное количество!!!");
+	}
+	void Sell()
+	{
+		count--;
+		cout << "Техника продана!" << endl;
+	}
+};
+
+class cars:public technika// производный класс "машины" от класса "техника"
+{
+private:
+	engine dvs;// двигатель
+	double timeToHundred;// время разгона до сотни
+
+public:
+	cars()
+	{
+		timeToHundred = 0;
+	}
+	cars(engine &dvs, double time, int year, string name, string color, double price, int count) :technika(year, 
+		name, color, price, count)
+	{
+		this->dvs = dvs;//установка двигателя
+		this->timeToHundred = time;
+	}
+	void Read()
+	{
+		PutCars();
+		cout << endl << "время разгона до сотни: ";
+		cin >> timeToHundred;
+		if (timeToHundred<0 || timeToHundred>100000) throw exception("Введено неккоректное время!!!");
 		dvs.Read();
+	}
+	void Print()
+	{
+		OutputCars();
+		cout << "Время разгона до сотни: " << timeToHundred << " секунд" << endl;
+		dvs.Print();
 	}
 	void Modern(double NewWeight, int NewPower, int NewResurs)// модернизация
 	{
@@ -274,13 +296,11 @@ public:
 		dvs.SetResurs(NewResurs);
 		dvs.Remont();
 	}
-	friend void Drive(cars *avto, int km);// тест-драйв, дружественная функция для класса car
-	~cars()
-	{
-	}
+	void Drive(cars *avto, int km);
 };
 
-void Drive(cars *avto, int km)// возврат значений через указатель
+
+void cars::Drive(cars *avto, int km)// возврат значений через указатель
 {
 	if (km<1) throw MyException("Ошибка, некорректное расстояние тест-драйва!", 0);
 	if (km>100)throw MyException("Ошибка, некорректное расстояние тест-драйва!", 1);
@@ -295,9 +315,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	SetConsoleOutputCP(1251);
 	system("color F0");
 	engine dvs("св-01", 10, 100, 0, 400);
-	cars avto(2020, "No_Name", "No_Color", 1000, dvs);
+	cars avto(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
 	cout << "машина 1:";
-	avto.OutputCars();
+	avto.Print();
 	bool f;
 	do{
 		f = false;
@@ -310,8 +330,8 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	} while (f);
 	printf("\nДанные после ввода:");
-	avto.OutputCars();
-	try{ Drive(&avto, 10); }
+	avto.Print();
+	try{ avto.Drive(&avto, 10); }
 	catch (MyException &ex)
 	{
 		cout << ex.what() << endl;
@@ -321,7 +341,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		exit(1);
 	}
 	printf("\nПосле тест-драйва:");
-	avto.OutputCars();
+	avto.Print();
 	try{ avto.Modern(100, 200, 500); }
 	catch (MyException &ex)
 	{
@@ -332,70 +352,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		exit(1);
 	}
 	printf("\nПосле модернизации:");
-	avto.OutputCars();
-	//Работа с массивом
-	cars avtoArray[3] = { 1000, 2000, 3000 };
-	for (int i = 0; i < 3; i++)
-	{
-		cout << endl << "Машина " << i + 1;
-		avtoArray[i].OutputCars();
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		cout << endl << "Машина " << i + 1;
-		do{
-			f = false;
-			try{ avtoArray[i].PutCars(); }
-			catch (exception &ex)
-			{
-				cout << "Ошибка ввода: " << ex.what() << endl;
-				cout << "Повторите попытку ввода!" << endl;
-				f = true;
-			}
-		} while (f);
-	}
-	printf("\nДанные после ввода:\n");
-	for (int i = 0; i < 3; i++)
-	{
-		cout << endl << "Машина " << i + 1;
-		avtoArray[i].OutputCars();
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		try{ Drive(&avtoArray[i], 10); }
-		catch (MyException &ex)
-		{
-			cout << ex.what() << endl;
-			cout << "Код ошибки: " << ex.Code() << endl;
-			cout << "завершение работы программы!";
-			getch();
-			exit(1);
-		}
-	}
-	printf("После тест-драйва:\n");
-	for (int i = 0; i < 3; i++)
-	{
-		cout << endl << "Машина " << i + 1;
-		avtoArray[i].OutputCars();
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		try{ avtoArray[i].Modern(100, 200, 500); }
-		catch (MyException &ex)
-		{
-			cout << ex.what() << endl;
-			cout << "Код ошибки: " << ex.Code() << endl;
-			cout << "завершение работы программы!";
-			getch();
-			exit(1);
-		}
-	}
-	printf("После модернизации:\n");
-	for (int i = 0; i < 3; i++)
-	{
-		cout << endl << "Машина " << i + 1;
-		avtoArray[i].OutputCars();
-	}
+	avto.Print();
 	getch();
 	return 0;
 }
