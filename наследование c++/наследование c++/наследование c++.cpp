@@ -152,15 +152,16 @@ protected:
 	string color;// цвет техники
 	double price;// цена
 	int count;
+	int petrol;// количество бензина (в литрах)
 public:
-	technika(const technika &other)
+	technika(const technika &other)// конструктор копирования
 	{
 		this->year = other.year;
 		this->name = other.name;
 		this->color = other.color;
 		this->price = other.price;
 		this->count = other.count;
-
+		this->petrol = other.petrol;
 	}
 	technika(int year, string name, string color, double price, int count)// конструктор с параметрами
 	{
@@ -169,6 +170,7 @@ public:
 		this->year = year;
 		this->price = price;
 		this->count = count;
+		this->petrol = 0;
 	}
 	technika()// конструктор без параметров
 	{
@@ -177,6 +179,7 @@ public:
 		year = 2020;
 		price = 1000;
 		count = 0;
+		zapravka();// вызов виртуальной функции из функции базового класса
 	}
 	// сеттеры и геттеры
 	void SetName(string name)
@@ -218,6 +221,22 @@ public:
 	int GetCount()
 	{
 		return count;
+	}
+	int GetPetrol()
+	{
+		return petrol;
+	}
+	virtual void zapravka()// виртуальная функция
+	{
+		if (petrol == 0)
+		{
+			petrol = 100;
+			cout << "Полный бак!(100л)" << endl;
+		}
+		else
+		{
+			cout << "ошибка, бак не пустой!" << endl;
+		}
 	}
 	int Sell()
 	{
@@ -308,7 +327,20 @@ public:
 		this->year = other.GetYear();
 		this->price = other.GetPrice();
 		this->count = other.GetCount();
+		this->petrol = other.GetPetrol();
 		this->timeToHundred = 0;
+	}
+	void zapravka() override// переопределенная функция базового класса
+	{
+		if (petrol != 100)
+		{
+			petrol += 10;
+			cout << "заправка на 10 литров!" << endl;
+		}
+		else
+		{
+			cout << "не удалось заправиться, бак полный" << endl;
+		}
 	}
 	int Drive(cars *avto, int km);
 	friend void operator<<(ostream &o, cars c);// перегрузка оператора cout
@@ -360,6 +392,7 @@ int cars::Drive(cars *avto, int km)// возврат значений через указатель
 	int ProbegAfterDrive;
 	ProbegAfterDrive = avto->dvs.GetProbeg() + km;
 	avto->dvs.SetProbeg(ProbegAfterDrive);
+	avto->petrol -= 10;
 	return ProbegAfterDrive;
 }
 
@@ -449,14 +482,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	SetConsoleOutputCP(1251);
 	//класс машина:
 	engine dvs("св-01", 10, 100, 0, 400);
-	technika tk(2020, "No_Name","No_Color", 15000, 5);
-	cars avto(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
-	avto = tk;// перегрузка оператора =
+	technika *tk = new technika(2020, "No_Name", "No_Color", 15000, 5);
+	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
+	tk->zapravka();// вызов виртуальной функции базового класса
+	*avto = *tk;// перегрузка оператора =
 	cout << avto;
 	bool f;
 	do{
 		f = false;
-		try{ cin>>avto; }
+		try{ cin>>*avto; }
 		catch (exception &ex)
 		{
 			cout << "Ошибка ввода: " << ex.what() << endl;
@@ -467,7 +501,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("\nДанные после ввода:");
 	cout << avto;
 	int probeg=0;
-	try{ probeg = avto.Drive(&avto, 10); }
+	try{ probeg = avto->Drive(avto, 10); }
 	catch (MyException &ex)
 	{
 		cout << ex.what() << endl;
@@ -476,9 +510,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
+	avto->zapravka();
 	printf("\nПробег после тест-драйва: ");
 	cout << probeg << endl;
-	try{ avto.Modern(100, 200, 500); }
+	try{ avto->Modern(100, 200, 500); }
 	catch (MyException &ex)
 	{
 		cout << ex.what() << endl;
@@ -489,8 +524,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	printf("\nПосле модернизации:");
 	cout << avto;
-	avto.technika::Sell();// вызов перегруженного метода базового класса
-	try{ avto.Sell(5); }
+	avto->technika::Sell();// вызов перегруженного метода базового класса
+	try{ avto->Sell(5); }
 	catch (exception &ex)
 	{
 		cout << ex.what() << endl;
