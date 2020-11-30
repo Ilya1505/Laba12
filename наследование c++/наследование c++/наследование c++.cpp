@@ -219,43 +219,46 @@ public:
 	{
 		return count;
 	}
-	void Print()// функкция вывода данных
-	{
-		cout << endl << "Марка: " << name << endl;
-		cout << "Цвет: " << color << endl;
-		cout << "Год выпуска: " << year << endl;
-		cout << "Цена: ";
-		printf("%.4lf\n", price);
-		cout<< "Количество: " << count << endl;
-	}
-	void Read()// функция ввода данных
-	{
-		fflush(stdin);
-		cout << "Марка: ";
-		getline(cin, name);
-		if (name == "") throw exception("Введена пустая строка марки!!!");
-		fflush(stdin);
-		cout << "Цвет: ";
-		getline(cin, color);
-		if (color == "") throw exception("Введена пустая строка цвета!!!");
-		cout << "Год выпуска: ";
-		cin >> year;
-		if (year<2000 || year>2020) throw exception("Введен неккоректный год выпуска!!!");
-		cout << "Цена: ";
-		cin >> price;
-		if (price <= 0) throw exception("Введена неккоректная цена!!!");
-		cout << "Количесвто: ";
-		cin >> count;
-		if (count <= 0) throw exception("Введено неккоректное количество!!!");
-	}
 	int Sell()
 	{
 		count--;
 		cout << "Техника продана!" << endl;
 		cout << "текущее количество: " << count << endl;
+		return count;
 	}
+	friend void operator<<(ostream &o, technika t);
+	friend technika operator>>(istream &o, technika &t);
 };
-
+void operator<<(ostream &o, technika t)// функкция вывода данных
+{
+	cout << endl << "Марка: " << t.name << endl;
+	cout << "Цвет: " << t.color << endl;
+	cout << "Год выпуска: " << t.year << endl;
+	cout << "Цена: ";
+	printf("%.4lf\n", t.price);
+	cout << "Количество: " << t.count << endl;
+}
+technika operator >>(istream &o, technika &t)// функция ввода данных
+{
+	fflush(stdin);
+	cout << "Марка: ";
+	getline(cin, t.name);
+	if (t.name == "") throw exception("Введена пустая строка марки!!!");
+	fflush(stdin);
+	cout << "Цвет: ";
+	getline(cin, t.color);
+	if (t.color == "") throw exception("Введена пустая строка цвета!!!");
+	cout << "Год выпуска: ";
+	cin >> t.year;
+	if (t.year<2000 || t.year>2020) throw exception("Введен неккоректный год выпуска!!!");
+	cout << "Цена: ";
+	cin >> t.price;
+	if (t.price <= 0) throw exception("Введена неккоректная цена!!!");
+	cout << "Количесвто: ";
+	cin >> t.count;
+	if (t.count <= 0) throw exception("Введено неккоректное количество!!!");
+	return t;
+}
 class cars:public technika// производный класс "машины" от класса "техника"
 {
 private:
@@ -280,22 +283,6 @@ public:
 	double GetTime()
 	{
 		return timeToHundred;
-	}
-	void Read()
-	{
-		cout << "машина:" << endl;
-		technika::Read();
-		cout << "время разгона до сотни: ";
-		cin >> timeToHundred;
-		if (timeToHundred<0 || timeToHundred>100000) throw exception("Введено неккоректное время!!!");
-		dvs.Read();
-	}
-	void Print()
-	{
-		cout << "машина:" << endl;
-		technika::Print();
-		cout << "Время разгона до сотни: " << timeToHundred << " секунд" << endl;
-		dvs.Print();
 	}
 	void Modern(double NewWeight, int NewPower, int NewResurs)// модернизация
 	{
@@ -324,8 +311,47 @@ public:
 		this->timeToHundred = 0;
 	}
 	int Drive(cars *avto, int km);
+	friend void operator<<(ostream &o, cars c);// перегрузка оператора cout
+	friend cars operator>>(istream &o, cars &c);// перегрузка оператора cin
 };
-
+void operator<<(ostream &o, cars c)
+{
+	cout << endl << "машина:" << endl;
+	cout << "Марка: " << c.name << endl;
+	cout << "Цвет: " << c.color << endl;
+	cout << "Год выпуска: " << c.year << endl;
+	cout << "Цена: ";
+	printf("%.4lf\n", c.price);
+	cout << "Количество: " << c.count << endl;
+	cout << "Время разгона до сотни: " << c.timeToHundred << " секунд" << endl;
+	c.dvs.Print();
+}
+cars operator>>(istream &o, cars &c)// перегрузка оператора cin
+{
+	cout << "машина:" << endl;
+	fflush(stdin);
+	cout << "Марка: ";
+	getline(cin, c.name);
+	if (c.name == "") throw exception("Введена пустая строка марки!!!");
+	fflush(stdin);
+	cout << "Цвет: ";
+	getline(cin, c.color);
+	if (c.color == "") throw exception("Введена пустая строка цвета!!!");
+	cout << "Год выпуска: ";
+	cin >> c.year;
+	if (c.year<2000 || c.year>2020) throw exception("Введен неккоректный год выпуска!!!");
+	cout << "Цена: ";
+	cin >> c.price;
+	if (c.price <= 0) throw exception("Введена неккоректная цена!!!");
+	cout << "Количесвто: ";
+	cin >> c.count;
+	if (c.count <= 0) throw exception("Введено неккоректное количество!!!");
+	cout << "время разгона до сотни: ";
+	cin >> c.timeToHundred;
+	if (c.timeToHundred<0 || c.timeToHundred>100000) throw exception("введено неккоректное время!!!");
+	c.dvs.Read();
+	return c;
+}
 
 int cars::Drive(cars *avto, int km)// возврат значений через указатель
 {
@@ -370,29 +396,53 @@ public:
 	{
 		return HourFly;
 	}
-	void Read()
-	{
-		cout << "самолет:" << endl;
-		technika::Read();
-		cout << "максимальная высота полета: ";
-		cin >> MaxHeight;
-		cout << "время налета (в часах): ";
-		cin >> HourFly;
-	}
-	void Print()
-	{
-		cout << "самолет:" << endl;
-		technika::Print();
-		cout << "максимальная высота полета: " << MaxHeight << endl;
-		cout << "время налета: " << HourFly << "часов(а)" << endl;
-	}
 	double Fly(double hour)// функция полета на определенное количество часов
 	{
 		if (hour < 0) throw exception("неккоректная продолжительность полета!");
 		HourFly += hour;
 		return HourFly;
 	}
+	friend void operator<<(ostream &o, plane p);// перегрузка оператора cout
+	friend plane operator>>(istream &o, plane &p);// перегрузка оператора cin
 };
+void operator<<(ostream &o, plane p)// перегрузка оператора cout
+{
+	cout << "самолет:" << endl;
+	cout << "Марка: " << p.name << endl;
+	cout << "Цвет: " << p.color << endl;
+	cout << "Год выпуска: " << p.year << endl;
+	cout << "Цена: ";
+	printf("%.4lf\n", p.price);
+	cout << "Количество: " << p.count << endl;
+	cout << "максимальная высота полета: ";
+	cin >> p.MaxHeight;
+	cout << "время налета (в часах): ";
+	cin >> p.HourFly;
+}
+plane operator>>(istream &o, plane &p)// перегрузка оператора cin
+{
+	cout << "самолет:" << endl;
+	fflush(stdin);
+	cout << "Марка: ";
+	getline(cin, p.name);
+	if (p.name == "") throw exception("Введена пустая строка марки!!!");
+	fflush(stdin);
+	cout << "Цвет: ";
+	getline(cin, p.color);
+	if (p.color == "") throw exception("Введена пустая строка цвета!!!");
+	cout << "Год выпуска: ";
+	cin >> p.year;
+	if (p.year<2000 || p.year>2020) throw exception("Введен неккоректный год выпуска!!!");
+	cout << "Цена: ";
+	cin >> p.price;
+	if (p.price <= 0) throw exception("Введена неккоректная цена!!!");
+	cout << "Количесвто: ";
+	cin >> p.count;
+	if (p.count <= 0) throw exception("Введено неккоректное количество!!!");
+	cout << "максимальная высота полета: " << p.MaxHeight << endl;
+	cout << "время налета: " << p.HourFly << "часов(а)" << endl;
+	return p;
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
 	SetConsoleCP(1251);// подключение русскоязычного ввода/вывода
@@ -402,11 +452,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	technika tk(2020, "No_Name","No_Color", 15000, 5);
 	cars avto(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
 	avto = tk;// перегрузка оператора =
-	avto.Print();
+	cout << avto;
 	bool f;
 	do{
 		f = false;
-		try{ avto.Read(); }
+		try{ cin>>avto; }
 		catch (exception &ex)
 		{
 			cout << "Ошибка ввода: " << ex.what() << endl;
@@ -415,7 +465,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	} while (f);
 	printf("\nДанные после ввода:");
-	avto.Print();
+	cout << avto;
 	int probeg=0;
 	try{ probeg = avto.Drive(&avto, 10); }
 	catch (MyException &ex)
@@ -438,7 +488,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		exit(1);
 	}
 	printf("\nПосле модернизации:");
-	avto.Print();
+	cout << avto;
 	avto.technika::Sell();// вызов перегруженного метода базового класса
 	try{ avto.Sell(5); }
 	catch (exception &ex)
@@ -450,10 +500,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	//класс самолет
 	plane pl(20000, 0, 2020, "No_Name", "No_Color", 150000, 5);
-	pl.Print();
+	cout << pl;
 	do{
 		f = false;
-		try{ pl.Read(); }
+		try{ cin>>pl; }
 		catch (exception &ex)
 		{
 			cout << "Ошибка ввода: " << ex.what() << endl;
@@ -462,7 +512,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	} while (f);
 	printf("\nДанные после ввода:");
-	pl.Print();
+	cout<<pl;
 	try{  pl.Fly(1); }
 	catch (exception &ex)
 	{
@@ -476,4 +526,3 @@ int _tmain(int argc, _TCHAR* argv[])
 	getch();
 	return 0;
 }
-
