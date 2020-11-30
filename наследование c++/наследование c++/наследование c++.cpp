@@ -314,6 +314,15 @@ public:
 		cout << "Техника продана!" << endl;
 		cout << "текущее количество: " << this->count << endl;
 	}
+	void operator=(technika other)
+	{
+		this->name = other.GetName();
+		this->color = other.GetColor();
+		this->year = other.GetYear();
+		this->price = other.GetPrice();
+		this->count = other.GetCount();
+		this->timeToHundred = 0;
+	}
 	int Drive(cars *avto, int km);
 };
 
@@ -390,7 +399,9 @@ int _tmain(int argc, _TCHAR* argv[])
 	SetConsoleOutputCP(1251);
 	//класс машина:
 	engine dvs("св-01", 10, 100, 0, 400);
+	technika tk(2020, "No_Name","No_Color", 15000, 5);
 	cars avto(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
+	avto = tk;// перегрузка оператора =
 	avto.Print();
 	bool f;
 	do{
