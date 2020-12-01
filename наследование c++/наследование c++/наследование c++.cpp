@@ -517,7 +517,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
 	tk->Zapravit();// вызов функции, вызывающей виртуальную функцию базового класса
 	*avto = *tk;// перегрузка оператора =
-	cout << avto;
+	cout << *avto;
 	bool f;
 	do{
 		f = false;
@@ -530,7 +530,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	} while (f);
 	printf("\nДанные после ввода:");
-	cout << avto;
+	cout << *avto;
 	int probeg=0;
 	try{ probeg = avto->Drive(avto, 10); }
 	catch (MyException &ex)
@@ -554,7 +554,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		exit(1);
 	}
 	printf("\nПосле модернизации:");
-	cout << avto;
+	cout << *avto;
 	avto->technika::Sell();// вызов перегруженного метода базового класса
 	try{ avto->Sell(5); }
 	catch (exception &ex)
