@@ -23,6 +23,12 @@ public:
 		return CodeError;
 	}
 };
+
+class avtoshop// абстрактный класс
+{public:
+	virtual void addTov() = 0;
+};
+
 class engine// двигатель
 {
 private:
@@ -144,7 +150,7 @@ public:
 
 	}
 };
-class technika// родительский класс всей техники
+class technika:public avtoshop// родительский класс всей техники, наследник абстрактного класса avtoshop
 {
 protected:
 	int year;// год выпуска
@@ -247,6 +253,11 @@ public:
 	}
 	friend void operator<<(ostream &o, technika t);
 	friend technika operator>>(istream &o, technika &t);
+	void addTov() override
+	{
+		count++;
+		cout << "ƒобавлено 1 нова€ техника" << endl;
+	}
 };
 void operator<<(ostream &o, technika t)// функкци€ вывода данных
 {
@@ -342,6 +353,11 @@ public:
 			cout << "не удалось заправитьс€, бак полный" << endl;
 		}
 	}
+	void addTov() override
+	{
+		count += 3;
+		cout << "ƒобавлено 3 новые машины" << endl;
+	}
 	int Drive(cars *avto, int km);
 	friend void operator<<(ostream &o, cars c);// перегрузка оператора cout
 	friend cars operator>>(istream &o, cars &c);// перегрузка оператора cin
@@ -435,6 +451,11 @@ public:
 		HourFly += hour;
 		return HourFly;
 	}
+	void addTov() override
+	{
+		count += 2;
+		cout << "ƒобавлено 2 новых самолета" << endl;
+	}
 	friend void operator<<(ostream &o, plane p);// перегрузка оператора cout
 	friend plane operator>>(istream &o, plane &p);// перегрузка оператора cin
 };
@@ -480,7 +501,10 @@ void zapravka(technika *ptr)// вызов виртуальной функции базовога класса или пер
 {
 	ptr->zapravka();
 }
-
+void addTov(avtoshop *ptr)
+{
+	ptr->addTov();
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
