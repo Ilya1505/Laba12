@@ -345,6 +345,7 @@ public:
 		this->petrol = other.GetPetrol();
 		this->timeToHundred = 0;
 	}
+
 	void zapravka()// переопределенная функция базового класса
 	{
 		if (petrol != 100)
