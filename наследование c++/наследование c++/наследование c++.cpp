@@ -232,7 +232,7 @@ public:
 	{
 		return petrol;
 	}
-	virtual void zapravka()// виртуальная функция
+	void zapravka()// виртуальная функция
 	{
 		if (petrol == 0)
 		{
@@ -345,7 +345,7 @@ public:
 		this->petrol = other.GetPetrol();
 		this->timeToHundred = 0;
 	}
-	void zapravka() override// переопределенная функция базового класса
+	void zapravka()// переопределенная функция базового класса
 	{
 		if (petrol != 100)
 		{
@@ -514,7 +514,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	engine dvs("св-01", 10, 100, 0, 400);
 	technika *tk = new technika(2020, "No_Name", "No_Color", 15000, 5);
 	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
-	tk->zapravka();// вызов функции, которая вызовет виртуальную функцию базового класса
+	tk->Zapravit();// вызов функции, которая вызовет функцию базового класса
 	*avto = *tk;// перегрузка оператора =
 	cout << avto;
 	bool f;
@@ -540,7 +540,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
-	avto->zapravka();// вызов функции, которая вызовет переопределяемую функцию производного класса класса
+	avto->Zapravit();// вызов функции, которая вызовет функцию базового класса
 	printf("\nПробег после тест-драйва: ");
 	cout << probeg << endl;
 	try{ avto->Modern(100, 200, 500); }
