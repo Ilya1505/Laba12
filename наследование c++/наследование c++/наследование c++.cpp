@@ -258,9 +258,9 @@ public:
 		count++;
 		cout << "Добавлено 1 новая техника" << endl;
 	}
-	void zapravka(technika *ptr)// вызов виртуальной функции базовога класса или переопределенной функции в производном классе
+	void Zapravit()// функция, вызывающая виртуальную функцию или переопределенную функцию
 	{
-		ptr->zapravka();
+		zapravka();
 	}
 };
 void operator<<(ostream &o, technika t)// функкция вывода данных
@@ -501,6 +501,7 @@ plane operator>>(istream &o, plane &p)// перегрузка оператора cin
 	cout << "время налета: " << p.HourFly << "часов(а)" << endl;
 	return p;
 }
+
 void addTov(avtoshop *ptr)
 {
 	ptr->addTov();
@@ -514,7 +515,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	engine dvs("св-01", 10, 100, 0, 400);
 	technika *tk = new technika(2020, "No_Name", "No_Color", 15000, 5);
 	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
-	zapravka(tk);// вызов виртуальной функции базового класса
+	tk->Zapravit();// вызов функции, вызывающей виртуальную функцию базового класса
 	*avto = *tk;// перегрузка оператора =
 	cout << avto;
 	bool f;
@@ -540,7 +541,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
-	zapravka(avto);
+	avto->Zapravit();// функция, вызывающая функцию производного класса
 	printf("\nПробег после тест-драйва: ");
 	cout << probeg << endl;
 	try{ avto->Modern(100, 200, 500); }
