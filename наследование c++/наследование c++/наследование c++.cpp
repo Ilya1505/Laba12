@@ -476,6 +476,12 @@ plane operator>>(istream &o, plane &p)// перегрузка оператора cin
 	cout << "время налета: " << p.HourFly << "часов(а)" << endl;
 	return p;
 }
+void zapravka(technika *ptr)// вызов виртуальной функции базовога класса или переопределенной функции в производном классе
+{
+	ptr->zapravka();
+}
+
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	SetConsoleCP(1251);// подключение русскоязычного ввода/вывода
@@ -484,7 +490,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	engine dvs("св-01", 10, 100, 0, 400);
 	technika *tk = new technika(2020, "No_Name", "No_Color", 15000, 5);
 	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
-	tk->zapravka();// вызов виртуальной функции базового класса
+	zapravka(tk);// вызов виртуальной функции базового класса
 	*avto = *tk;// перегрузка оператора =
 	cout << avto;
 	bool f;
@@ -510,7 +516,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
-	avto->zapravka();
+	zapravka(avto);
 	printf("\nПробег после тест-драйва: ");
 	cout << probeg << endl;
 	try{ avto->Modern(100, 200, 500); }
