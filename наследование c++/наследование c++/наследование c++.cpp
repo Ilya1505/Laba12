@@ -232,7 +232,7 @@ public:
 	{
 		return petrol;
 	}
-	void zapravka()// виртуальная функция
+	virtual void zapravka()// виртуальная функция
 	{
 		if (petrol == 0)
 		{
@@ -258,9 +258,9 @@ public:
 		count++;
 		cout << "Добавлено 1 новая техника" << endl;
 	}
-	void Zapravit()// вызов виртуальной функции базовога класса или переопределенной функции в производном классе
+	void zapravka(technika *ptr)// вызов виртуальной функции базовога класса или переопределенной функции в производном классе
 	{
-		zapravka();
+		ptr->zapravka();
 	}
 };
 void operator<<(ostream &o, technika t)// функкция вывода данных
@@ -345,8 +345,7 @@ public:
 		this->petrol = other.GetPetrol();
 		this->timeToHundred = 0;
 	}
-
-	void zapravka()// переопределенная функция базового класса
+	void zapravka() override// переопределенная функция базового класса
 	{
 		if (petrol != 100)
 		{
@@ -515,7 +514,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	engine dvs("св-01", 10, 100, 0, 400);
 	technika *tk = new technika(2020, "No_Name", "No_Color", 15000, 5);
 	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
-	tk->Zapravit();// вызов функции, которая вызовет функцию базового класса
+	zapravka(tk);// вызов виртуальной функции базового класса
 	*avto = *tk;// перегрузка оператора =
 	cout << avto;
 	bool f;
@@ -541,7 +540,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
-	avto->Zapravit();// вызов функции, которая вызовет функцию базового класса
+	zapravka(avto);
 	printf("\nПробег после тест-драйва: ");
 	cout << probeg << endl;
 	try{ avto->Modern(100, 200, 500); }
