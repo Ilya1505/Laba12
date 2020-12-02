@@ -7,7 +7,7 @@ public class Main {
         engine dvs = new engine("no_name", 10, 100, 0, 1000);// конструктор со всеми параметрами
         cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5);// конструктор со всеми параметрами
         int probeg=0;
-        avto.Print();
+        System.out.println(avto);
         boolean f;
         do {
             f=false;
@@ -24,7 +24,7 @@ public class Main {
             }
         }while (f);
         System.out.println(System.lineSeparator()+"Данные после ввода: ");
-        avto.Print();
+        System.out.println(avto);
         try{probeg=avto.Drive(10);}
         catch(MyExceptionOther ex)
         {
@@ -42,7 +42,7 @@ public class Main {
             System.exit(1);
         }
         System.out.println("После модернизации: ");
-        avto.Print();
+        System.out.println(avto);
         avto.Sell();// вызов базового метода продажи авто
         avto.Sell(5);// вызов метода производного класса
     }
@@ -183,13 +183,12 @@ class engine// двигатель
         weight=Double.parseDouble(read.nextLine());
         if(weight<10||weight>10000) throw new MyExceptionRead(9);
     }
-    public void Print()// вывод данных
+    public String toString()// вывод данных
     {
-        System.out.println("Марка двигателя: " + name);
-        System.out.println("Мощность двигателя: " + power);
-        System.out.println("Пробег двигателя: " + probeg);
-        System.out.println("Ресурс двигателя: " + resurs);
-        System.out.println("Вес двигателя: " + weight);
+        String en;
+        en="Марка двигателя: " + name+"\n"+"Мощность двигателя: " + power+"\n"+"Пробег двигателя: " + probeg+
+            "\n"+"Ресурс двигателя: " + resurs+"\n"+"Вес двигателя: " + weight+"\n";
+        return en;
     }
 };
 
@@ -272,13 +271,11 @@ class technika// класс авто
         count=Integer.parseInt(read.nextLine());
         if(count<0) throw new MyExceptionRead(10);
     }
-    public void OutputT()// функция вывода данных
-    {
-        System.out.println("Марка: " + name);
-        System.out.println("Цвет: " + color);
-        System.out.println("Год выпуска: " + year);
-        System.out.println("Цена: " + price);
-        System.out.println("Количество: " + count);
+    public String toString()// функция вывода данных
+    {   String tk;
+    tk="Марка: "+name+"\n"+"Цвет: "+color+"\n"+"Год выпуска: "
+            +year+"\n"+"Цена: "+price+"\n"+"Количество: "+count+"\n";
+    return tk;
     }
     public int Sell()
     {
@@ -335,15 +332,12 @@ class cars extends technika
         if(timeToHundred<1||timeToHundred>10000) throw new MyExceptionRead(11);
         dvs.Read();
     }
-    public void Print()
+    public String toString()// функция вывода данных
     {
-        System.out.println("Марка: " + name);
-        System.out.println("Цвет: " + color);
-        System.out.println("Год выпуска: " + year);
-        System.out.println("Цена: " + price);
-        System.out.println("Количество: " + count);
-        System.out.println("Время разгона до сотни: " + timeToHundred);
-        dvs.Print();
+        String avto;
+        avto="Марка: "+name+"\n"+"Цвет: "+color+"\n"+"Год выпуска: "
+                +year+"\n"+"Цена: "+price+"\n"+"Количество: "+count+"\n"+"Время разгона до сотни: "+timeToHundred+"\n";
+        return avto+dvs.toString();
     }
     public int Drive(int km) throws MyExceptionOther// тест-драйв
     {
@@ -402,6 +396,38 @@ class plane extends technika
   {
       return HourFly;
   }
+  public String toString()// функция вывода данных
+  {
+      String plane;
+      plane="Марка: "+name+"\n"+"Цвет: "+color+"\n"+"Год выпуска: "
+              +year+"\n"+"Цена: "+price+"\n"+"Количество: "+count+"\n"
+              +"Максимальная высота полета: "+MaxHeight+"\n"+"Время налета в часах: "+HourFly+"\n";
+      return plane;
+  }
+  public void Read() throws NumberFormatException, MyExceptionRead
+  {
+      Scanner read = new Scanner(System.in);
+      System.out.println("Введите марку авто: ");
+      name=read.nextLine();
+      if(name.trim().length()==0) throw new MyExceptionRead(1);
+      System.out.println("Введите цвет: ");
+      color=read.nextLine();
+      if(color.trim().length()==0) throw new MyExceptionRead(2);
+      System.out.println("Введите год выпуска: ");
+      year=Integer.parseInt(read.nextLine());
+      if(year<2000||year>2020) throw new MyExceptionRead(3);
+      System.out.println("Введите цену: ");
+      price=Double.parseDouble(read.nextLine());
+      if(price<1||price>1000000) throw new MyExceptionRead(4);
+      System.out.println("Введите количество: ");
+      count=Integer.parseInt(read.nextLine());
+      if(count<0) throw new MyExceptionRead(10);
+      System.out.println("Введите максимальную высоту полета: ");
+      MaxHeight=Double.parseDouble(read.nextLine());
+      System.out.println("Введите время налета в часах: ");
+      MaxHeight=Double.parseDouble(read.nextLine());
+  }
+
   public double Fly(double hour)// функция полета на определенное количество часов
   {
       HourFly += hour;
