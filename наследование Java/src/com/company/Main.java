@@ -43,6 +43,8 @@ public class Main {
         }
         System.out.println("После модернизации: ");
         avto.Print();
+        avto.Sell();// вызов базового метода продажи авто
+        avto.Sell(5);// вызов метода производного класса
     }
 };
 class MyExceptionRead extends Exception// класс исключений при чтении данных, наследник общего класса Exception
@@ -302,6 +304,14 @@ class cars extends technika
         this.dvs = dvs;//установка двигателя
         this.timeToHundred = time;
     }
+    public void SetTime(double time)
+    {
+        this.timeToHundred = time;
+    }
+    public double GetTime()
+    {
+        return timeToHundred;
+    }
     public void Read() throws NumberFormatException, MyExceptionRead
     {
         Scanner read = new Scanner(System.in);
@@ -351,5 +361,12 @@ class cars extends technika
         dvs.SetPower(NewPower);
         dvs.SetResurs(NewResurs);
         dvs.Remont();
+    }
+    public int Sell(int count)// перегрузка метода базового класса
+    {
+        this.count -= count;
+        System.out.println("Техника продана!");
+        System.out.println("текущее количество: " + this.count);
+        return this.count;
     }
 };
