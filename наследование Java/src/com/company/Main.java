@@ -370,3 +370,41 @@ class cars extends technika
         return this.count;
     }
 };
+class plane extends technika
+{
+  private double MaxHeight;// максимальная высота полета (в метрах)
+  private double HourFly;// налет в часах
+
+  public plane(String name, String color, int year, double price, int count, double maxheight, double hourfly)
+  {
+    super(name, color, year, price, count);
+    MaxHeight = maxheight;
+    HourFly = hourfly;
+  }
+  public plane()
+  {
+      MaxHeight=10000;
+      HourFly=0;
+  }
+  public void SetHeight(double height)
+  {
+      this.MaxHeight = height;
+  }
+  public void SetHourFly(double hour)
+  {
+      this.HourFly = hour;
+  }
+  public double GetHeight()
+  {
+      return MaxHeight;
+  }
+  double GetHour()
+  {
+      return HourFly;
+  }
+  public double Fly(double hour)// функция полета на определенное количество часов
+  {
+      HourFly += hour;
+      return HourFly;
+  }
+};
