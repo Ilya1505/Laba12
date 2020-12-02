@@ -7,6 +7,7 @@ public class Main {
         engine dvs = new engine("no_name", 10, 100, 0, 1000);// конструктор со всеми параметрами
         cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5);// конструктор со всеми параметрами
         int probeg=0;
+        System.out.println("Машина:");
         System.out.println(avto);
         boolean f;
         do {
@@ -45,8 +46,32 @@ public class Main {
         System.out.println(avto);
         avto.Sell();// вызов базового метода продажи авто
         avto.Sell(5);// вызов метода производного класса
+        // самолет
+        plane pl = new plane("no_name", "no_color", 2020, 1000,
+                10, 10000,5);// конструктор со всеми параметрами
+        System.out.println("Самолет:");
+        System.out.println(pl);
+        do {
+            f=false;
+            try {
+                pl.Read();
+            }catch (NumberFormatException ex) {//обработка программного исключения
+                f=true;
+                System.out.println("Ошибка: " + ex);
+                System.out.println("Введите данные еще раз!");
+            }catch (MyExceptionRead ex) {//обработка пользовательского исключения
+                f = true;
+                System.out.println("Ошибка: " + ex);
+                System.out.println("Введите данные еще раз!");
+            }
+        }while (f);
+        System.out.println(System.lineSeparator()+"Данные после ввода: ");
+        System.out.println(pl);
+        pl.Fly(1);
+        System.out.println("Налет (в часах) после полета: " + pl.GetHour());
+        pl.Sell();
     }
-};
+}
 class MyExceptionRead extends Exception// класс исключений при чтении данных, наследник общего класса Exception
 {
     private int Code;
