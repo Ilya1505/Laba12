@@ -7,6 +7,7 @@ public class Main {
         engine dvs = new engine("no_name", 10, 100, 0, 1000);// конструктор со всеми параметрами
         cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5);// конструктор со всеми параметрами
         int probeg=0;
+        AddTov(avto);// вызов функции, вызывающей абстрактную функцию
         System.out.println("Машина:");
         System.out.println(avto);
         boolean f;
@@ -71,6 +72,11 @@ public class Main {
         System.out.println("Налет (в часах) после полета: " + pl.GetHour());
         pl.Sell();
     }
+    public static void AddTov(avtoShop tk)
+    {
+        tk.addTov();
+    }
+
 }
 class MyExceptionRead extends Exception// класс исключений при чтении данных, наследник общего класса Exception
 {
@@ -111,6 +117,10 @@ class MyExceptionOther extends Exception// класс исключений пр�
         if(Code==2) return "введены некорректные параметры модернизации";
         return "неизвестная ошибка";
     }
+}
+abstract class avtoShop// абстрактный класс
+{
+    public abstract void addTov();// абстрактная функция
 }
 class engine// двигатель
 {
@@ -217,7 +227,7 @@ class engine// двигатель
     }
 };
 
-class technika// класс авто
+class technika extends avtoShop// класс авто
 {
     protected String name=new String();// марка авто
     protected String color=new String();// цвет авто
@@ -309,6 +319,11 @@ class technika// класс авто
         System.out.println("текущее количество: "+count);
         return count;
     }
+    public void addTov()// перегрузка абстрактной функции
+    {
+        count++;
+        System.out.println("Добавлена 1 новая техника");
+    }
 };
 class cars extends technika
 {
@@ -388,6 +403,11 @@ class cars extends technika
         System.out.println("текущее количество: " + this.count);
         return this.count;
     }
+    public void addTov()// перегрузка абстрактной функции
+    {
+        count += 3;
+        System.out.println("Добавлено 3 новые машины");
+    }
 };
 class plane extends technika
 {
@@ -452,10 +472,14 @@ class plane extends technika
       System.out.println("Введите время налета в часах: ");
       MaxHeight=Double.parseDouble(read.nextLine());
   }
-
   public double Fly(double hour)// функция полета на определенное количество часов
   {
       HourFly += hour;
       return HourFly;
   }
+    public void addTov()// перегрузка абстрактной функции
+    {
+        count += 2;
+        System.out.println("Добавлено 2 новых самолета");
+    }
 };

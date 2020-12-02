@@ -256,7 +256,7 @@ public:
 	void addTov() override
 	{
 		count++;
-		cout << "Добавлено 1 новая техника" << endl;
+		cout << "Добавлена 1 новая техника" << endl;
 	}
 	void Zapravit()// функция, вызывающая виртуальную функцию или переопределенную функцию
 	{
@@ -564,6 +564,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		getch();
 		exit(1);
 	}
+	addTov(avto);
 	//класс самолет
 	plane pl(20000, 0, 2020, "No_Name", "No_Color", 150000, 5);
 	cout << pl;
