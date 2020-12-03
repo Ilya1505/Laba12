@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args)
     {
         engine dvs = new engine("no_name", 10, 100, 0, 1000);// конструктор со всеми параметрами
-        cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5);// конструктор со всеми параметрами
+        cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5,0);// конструктор со всеми параметрами
         int probeg=0;
         AddTov(avto);// вызов функции, вызывающей абстрактную функцию
         System.out.println("Машина:");
@@ -27,6 +27,7 @@ public class Main {
         }while (f);
         System.out.println(System.lineSeparator()+"Данные после ввода: ");
         System.out.println(avto);
+        Zapravit(avto);
         try{probeg=avto.Drive(10);}
         catch(MyExceptionOther ex)
         {
@@ -48,8 +49,7 @@ public class Main {
         avto.Sell();// вызов базового метода продажи авто
         avto.Sell(5);// вызов метода производного класса
         // самолет
-        plane pl = new plane("no_name", "no_color", 2020, 1000,
-                10, 10000,5);// конструктор со всеми параметрами
+        plane pl = new plane("no_name", "no_color", 2020, 1000, 10, 10000,5,0);// конструктор со всеми параметрами
         System.out.println("Самолет:");
         System.out.println(pl);
         do {
@@ -68,6 +68,7 @@ public class Main {
         }while (f);
         System.out.println(System.lineSeparator()+"Данные после ввода: ");
         System.out.println(pl);
+        Zapravit(pl);
         pl.Fly(1);
         System.out.println("Налет (в часах) после полета: " + pl.GetHour());
         pl.Sell();
@@ -75,6 +76,10 @@ public class Main {
     public static void AddTov(avtoShop tk)
     {
         tk.addTov();
+    }
+    public static void Zapravit(AZS tk)
+    {
+        tk.zapravka();
     }
 
 }
@@ -118,6 +123,11 @@ class MyExceptionOther extends Exception// класс исключений пр�
         return "неизвестная ошибка";
     }
 }
+interface AZS// интерфейс
+{
+    void zapravka();
+}
+
 abstract class avtoShop// абстрактный класс
 {
     public abstract void addTov();// абстрактная функция
@@ -227,20 +237,22 @@ class engine// двигатель
     }
 };
 
-class technika extends avtoShop// класс авто
+class technika extends avtoShop implements AZS// класс авто
 {
     protected String name=new String();// марка авто
     protected String color=new String();// цвет авто
     protected int year;// год выпуска
     protected double price;// цена
     protected int count;// количество авто
-    public technika(String name, String color, int yr, double pr, int co)// конструктор со всеми параметрами
+    protected double petrol;// количество бензина
+    public technika(String name, String color, int yr, double pr, int co, double pt)// конструктор со всеми параметрами
     {
         this.name=name;
         this.color=color;
         this.year = yr;
         this.price = pr;
         this.count = co;
+        this.petrol=pt;
     }
     public technika()// конструктор без параметров
     {
@@ -249,6 +261,7 @@ class technika extends avtoShop// класс авто
         year = 2000;
         price = 0;
         count=0;
+        petrol=0;
     }
     // сеттеры и геттеры
     public void SetName(String name)
@@ -324,8 +337,17 @@ class technika extends avtoShop// класс авто
         count++;
         System.out.println("Добавлена 1 новая техника");
     }
+    public void zapravka()
+    {
+        if(petrol==0)
+        {
+            petrol+=100;
+            System.out.println("Бак полностью заправлен");
+        }
+        else System.out.println("100л залить нельзя, бак не пустой");
+    }
 };
-class cars extends technika
+class cars extends technika implements AZS
 {
     private engine dvs;// двигатель
     private double timeToHundred;// время разгона до сотни
@@ -335,9 +357,9 @@ class cars extends technika
         timeToHundred = 0;
         dvs = new engine();
     }
-    public cars(String name, String color, int year, double price, int count, engine dvs, double time)
+    public cars(String name, String color, int year, double price, int count, engine dvs, double time, double petrol)
     {
-        super(name, color, year, price, count);
+        super(name, color, year, price, count, petrol);
         this.dvs = dvs;//установка двигателя
         this.timeToHundred = time;
     }
@@ -408,15 +430,24 @@ class cars extends technika
         count += 3;
         System.out.println("Добавлено 3 новые машины");
     }
+    public void zapravka()
+    {
+        if(petrol<=90)
+        {
+            petrol+=10;
+            System.out.println("Залито 10л бензина");
+        }
+        else System.out.println("10л залить нельзя, бак почти полный");
+    }
 };
-class plane extends technika
+class plane extends technika implements AZS
 {
   private double MaxHeight;// максимальная высота полета (в метрах)
   private double HourFly;// налет в часах
 
-  public plane(String name, String color, int year, double price, int count, double maxheight, double hourfly)
+  public plane(String name, String color, int year, double price, int count, double maxheight, double hourfly, double petrol)
   {
-    super(name, color, year, price, count);
+    super(name, color, year, price, count, petrol);
     MaxHeight = maxheight;
     HourFly = hourfly;
   }
@@ -481,5 +512,14 @@ class plane extends technika
     {
         count += 2;
         System.out.println("Добавлено 2 новых самолета");
+    }
+    public void zapravka()
+    {
+        if(petrol<=50)
+        {
+            petrol+=50;
+            System.out.println("Залито 50л бензина");
+        }
+        else System.out.println("50л залить нельзя");
     }
 };
