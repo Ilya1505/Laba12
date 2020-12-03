@@ -5,7 +5,10 @@ public class Main {
     public static void main(String[] args)
     {
         engine dvs = new engine("no_name", 10, 100, 0, 1000);// конструктор со всеми параметрами
+        engine dvs1 = new engine();
         cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5,0);// конструктор со всеми параметрами
+        cars avto1=new cars("no_name", "no_color", 2020, 10000, 20, dvs1,10,0);
+        avto=(cars)avto1.clone();// мелкое клонирование
         int probeg=0;
         AddTov(avto);// вызов функции, вызывающей абстрактную функцию
         System.out.println("Машина:");
@@ -347,7 +350,7 @@ class technika extends avtoShop implements AZS// класс авто
         else System.out.println("100л залить нельзя, бак не пустой");
     }
 };
-class cars extends technika implements AZS
+class cars extends technika implements AZS, Cloneable// мелкое копирование (dvs копируется ссылка)
 {
     private engine dvs;// двигатель
     private double timeToHundred;// время разгона до сотни
@@ -438,6 +441,15 @@ class cars extends technika implements AZS
             System.out.println("Залито 10л бензина");
         }
         else System.out.println("10л залить нельзя, бак почти полный");
+    }
+    public Object clone()
+    {
+        try{
+            cars clone=(cars)super.clone();
+        }catch (CloneNotSupportedException e){
+            System.out.println(e.getMessage());
+        }
+        return this;
     }
 };
 class plane extends technika implements AZS
