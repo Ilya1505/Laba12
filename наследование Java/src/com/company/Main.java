@@ -135,7 +135,7 @@ abstract class avtoShop// абстрактный класс
 {
     public abstract void addTov();// абстрактная функция
 }
-class engine// двигатель
+class engine implements Cloneable// двигатель, возможность клонирования
 {
     private String name=new String();// марка двигателя
     private double weight;// вес
@@ -237,6 +237,15 @@ class engine// двигатель
         en="Марка двигателя: " + name+"\n"+"Мощность двигателя: " + power+"\n"+"Пробег двигателя: " + probeg+
             "\n"+"Ресурс двигателя: " + resurs+"\n"+"Вес двигателя: " + weight+"\n";
         return en;
+    }
+    public Object clone()// глубокое клонирование
+    {
+        try{
+            engine clone=(engine)super.clone();
+        }catch (CloneNotSupportedException e){
+            System.out.println(e.getMessage());
+        }
+        return this;
     }
 };
 
@@ -350,7 +359,7 @@ class technika extends avtoShop implements AZS// класс авто
         else System.out.println("100л залить нельзя, бак не пустой");
     }
 };
-class cars extends technika implements AZS, Cloneable// мелкое копирование (dvs копируется ссылка)
+class cars extends technika implements AZS, Cloneable// глубокое клонирование (dvs также клонируется)
 {
     private engine dvs;// двигатель
     private double timeToHundred;// время разгона до сотни
