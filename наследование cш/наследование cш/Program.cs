@@ -62,9 +62,9 @@ namespace наследование_cш
         }
         abstract class avtoShop// абстрактный класс
         {
-            public abstract void addTov();// абстрактная функция
+            public abstract void addTov();// абстрактный метод
         }
-        class engine// двигатель
+        class engine:ICloneable// двигатель
         {
             private string name;// марка двигателя
             public String Name
@@ -179,6 +179,10 @@ namespace наследование_cш
                 en = "Марка двигателя: " + name + "\n" + "Мощность двигателя: " + power + "\n" + "Пробег двигателя: " + probeg +
                     "\n" + "Ресурс двигателя: " + resurs + "\n" + "Вес двигателя: " + weight + "\n";
                 return en;
+            }
+            public object Clone()
+            {
+                return new engine(name, weight, power, probeg, resurs);
             }
             //public void Print()// вывод данных
             //{
@@ -329,7 +333,7 @@ namespace наследование_cш
                 else Console.WriteLine("100л залить нельзя, бак не пустой");
             }
         };
-        class cars : technica,AZS
+        class cars : technica,AZS,ICloneable
         {
             private engine dvs;// двигатель
             public engine Dvs
@@ -348,7 +352,7 @@ namespace наследование_cш
                 timeToHundred = 0;
                 dvs = new engine();
             }
-            public cars(String name, String color, int year, double price,
+            public cars(string name, string color, int year, double price,
                 int count, engine dvs, double time, double petrol)
                 : base(name, color, year, price, count, petrol)// вызов конструктора базового класса
             {
@@ -407,6 +411,12 @@ namespace наследование_cш
                     Console.WriteLine("Залито 10л бензина");
                 }
                 else Console.WriteLine("10л залить нельзя, бак почти полный");
+            }
+            public object Clone()
+            {
+                cars c = new cars(name, color, year, price, count, dvs, timeToHundred, petrol);
+                dvs = (engine)dvs.Clone();
+                return c;
             }
         };
         class plane : technica,AZS

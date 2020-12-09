@@ -8,7 +8,7 @@ public class Main {
         engine dvs1 = new engine();
         cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs,5,0);// конструктор со всеми параметрами
         cars avto1=new cars("no_name", "no_color", 2020, 10000, 20, dvs1,10,0);
-        avto=(cars)avto1.clone();// мелкое клонирование
+        avto=(cars)avto1.clone();// глубокое клонирование
         int probeg=0;
         AddTov(avto);// вызов функции, вызывающей абстрактную функцию
         System.out.println("Машина:");
@@ -249,7 +249,7 @@ class engine implements Cloneable// двигатель, возможность �
     }
 };
 
-class technika extends avtoShop implements AZS// класс авто
+class technika extends avtoShop implements AZS// базовый класс
 {
     protected String name=new String();// марка авто
     protected String color=new String();// цвет авто
