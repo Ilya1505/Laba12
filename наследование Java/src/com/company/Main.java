@@ -526,6 +526,7 @@ class plane extends technika implements AZS
   }
   public double Fly(double hour)// функция полета на определенное количество часов
   {
+      petrol-=50;
       HourFly += hour;
       return HourFly;
   }
