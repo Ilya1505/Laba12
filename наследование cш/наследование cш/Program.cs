@@ -56,6 +56,14 @@ namespace наследование_cш
             avto.OutputCars();
             Console.ReadLine();
         }
+        interface AZS// интерфейс
+        {
+            void zapravka();
+        }
+        abstract class avtoShop// абстрактный класс
+        {
+            public abstract void addTov();// абстрактная функция
+        }
         class engine// двигатель
         {
             private string name;// марка двигателя
@@ -181,7 +189,7 @@ namespace наследование_cш
             //    Console.WriteLine("Вес двигателя: " + weight);
             //}
         };
-        class technica
+        class technica:avtoShop, AZS
         {
             protected string name;// марка авто
             public string Name// свойство класса
@@ -298,7 +306,7 @@ namespace наследование_cш
                 Console.WriteLine("текущее количество: " + count);
                 return count;
             }
-            public void addTov()// перегрузка абстрактной функции
+            public override void addTov()// перегрузка абстрактной функции
             {
                 count++;
                 Console.WriteLine("Добавлена 1 новая техника");
@@ -321,7 +329,7 @@ namespace наследование_cш
                 else Console.WriteLine("100л залить нельзя, бак не пустой");
             }
         };
-        class cars : technica
+        class cars : technica,AZS
         {
             private engine dvs;// двигатель
             public engine Dvs
@@ -386,7 +394,7 @@ namespace наследование_cш
                 Console.WriteLine("текущее количество: " + this.count);
                 return this.count;
             }
-            public void addTov()// перегрузка абстрактной функции
+            public override void addTov()// перегрузка абстрактной функции
             {
                 count += 3;
                 Console.WriteLine("Добавлено 3 новые машины");
@@ -401,7 +409,7 @@ namespace наследование_cш
                 else Console.WriteLine("10л залить нельзя, бак почти полный");
             }
         };
-        class plane : technica
+        class plane : technica,AZS
         {
             private double MaxHeight;// максимальная высота полета (в метрах)
             public double MAXHEIGHT
@@ -451,7 +459,7 @@ namespace наследование_cш
                 HourFly += hour;
                 return HourFly;
             }
-            public void addTov()// перегрузка абстрактной функции
+            public override void addTov()// перегрузка абстрактной функции
             {
                 count += 2;
                 Console.WriteLine("Добавлено 2 новых самолета");
