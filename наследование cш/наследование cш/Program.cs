@@ -12,14 +12,19 @@ namespace наследование_cш
         static void Main(string[] args)
         {
             Console.WriteLine("Инициализация:\n");
-            engine dvs = new engine("No_Name", 50, 150, 0, 1000);// конструктор со всеми параметрами
-            cars avto = new cars("no_name", "no_color", 2020, 1000, dvs);// конструктор со всеми параметрами
-            avto.OutputCars();
+            engine dvs = new engine("no_name", 10, 100, 0, 1000);// конструктор со всеми параметрами
+            engine dvs1 = new engine();
+            cars avto = new cars("no_name", "no_color", 2020, 1000, 10, dvs, 5, 0);// конструктор со всеми параметрами
+            cars avto1 = new cars("no_name", "no_color", 2020, 10000, 20, dvs1, 10, 0);
+            avto = (cars)avto1.Clone();// глубокое клонирование
+            AddTov(avto);// вызов метода где использ абстракт класс
+            Console.WriteLine("Машина:");
+            Console.WriteLine(avto);
             bool f;
             do
             {
                 f = false;
-                try { avto.PutCars(); }
+                try { avto.Read(); }
                 catch (FormatException ex)// обработка программного исключения
                 {
                     f = true;
@@ -34,8 +39,9 @@ namespace наследование_cш
                 }
             } while (f);
             Console.WriteLine("\nДанные после ввода:");
-            avto.OutputCars();
+            Console.Write(avto);
             int probegAfterDrive = 0;
+            Zapravit(avto);// вызов метода где использ интерфейс
             try { probegAfterDrive = avto.Drive(10); }
             catch (Exception ex)// обработка пользовательского исключения
             {
@@ -53,8 +59,44 @@ namespace наследование_cш
                 Environment.Exit(1);
             }
             Console.WriteLine("\n\nПосле модернизации:");
-            avto.OutputCars();
+            Console.Write(avto);
+            avto.Sell();// вызов базового метода продажи авто
+            avto.Sell(5);// вызов метода производного класса
+            Console.WriteLine("Самолет:");
+            plane pl = new plane("no_name", "no_color", 2020, 1000, 10, 10000, 5, 0);// конструктор со всеми параметрами
+            Console.WriteLine(pl);
+            do
+            {
+                f = false;
+                try { pl.Read(); }
+                catch (FormatException ex)// обработка программного исключения
+                {
+                    f = true;
+                    Console.WriteLine("Ошибка: " + ex.Message);
+                    Console.WriteLine("Введите данные еще раз");
+                }
+                catch (Exception ex)// обработка пользовательского исключения
+                {
+                    f = true;
+                    Console.WriteLine("Ошибка: " + ex.Message);
+                    Console.WriteLine("Введите данные еще раз");
+                }
+            } while (f);
+            Console.WriteLine("\nДанные после ввода:");
+            Console.Write(pl);
+            Zapravit(pl);
+            pl.Fly(1);
+            Console.WriteLine("Налет (в часах) после полета: " + pl.HOURFLY);
+            pl.Sell();
             Console.ReadLine();
+        }
+        static void AddTov(avtoShop tk)// полиморфизм
+        {
+            tk.addTov();
+        }
+        static void Zapravit(AZS tk)
+        {
+            tk.zapravka();
         }
         interface AZS// интерфейс
         {
@@ -67,7 +109,7 @@ namespace наследование_cш
         class engine:ICloneable// двигатель
         {
             private string name;// марка двигателя
-            public String Name
+            public string Name
             {
                 set
                 {
@@ -173,11 +215,12 @@ namespace наследование_cш
                 this.weight = Convert.ToDouble(Console.ReadLine());
                 if (weight < 0 || weight > 1000000) throw ex = new Exception("некорректный вес двигателя");
             }
-            public string toString()// вывод данных
+            public override string ToString()// вывод данных
             {
-                string en;
-                en = "Марка двигателя: " + name + "\n" + "Мощность двигателя: " + power + "\n" + "Пробег двигателя: " + probeg +
-                    "\n" + "Ресурс двигателя: " + resurs + "\n" + "Вес двигателя: " + weight + "\n";
+                string en = "";
+                en += "Марка двигателя: " + name + "\n" + "Мощность двигателя: " +Convert.ToString(power)
+                    + "\n" + "Пробег двигателя: " + Convert.ToString(probeg) +"\n" +
+                    "Ресурс двигателя: " + Convert.ToString(resurs) + "\n" + "Вес двигателя: " + Convert.ToString(weight) + "\n";
                 return en;
             }
             public object Clone()
@@ -296,7 +339,7 @@ namespace наследование_cш
                 count = Convert.ToInt32(Console.ReadLine());
                 if (count < 0) throw ex = new Exception("неккоректное количество");
             }
-            public string toString()// функция вывода данных
+            public override string ToString()// функция вывода данных
             {
                 string tk;
                 tk = "Марка: " + name + "\n" + "Цвет: " + color + "\n" + "Год выпуска: "
@@ -367,12 +410,12 @@ namespace наследование_cш
                 if (timeToHundred < 1 || timeToHundred > 10000000) throw ex = new Exception("неккоректное время разгона");
                 dvs.Read();
             }
-            public string toString()// функция вывода данных
+            public override string ToString()// функция вывода данных
             {
                 string avto;
                 avto = "Марка: " + name + "\n" + "Цвет: " + color + "\n" + "Год выпуска: "
                         + year + "\n" + "Цена: " + price + "\n" + "Количество: " + count + "\n" + "Время разгона до сотни: " + timeToHundred + "\n";
-                return avto + dvs.toString();
+                return avto + dvs.ToString();
             }
             public int Drive(int km)// тест-драйв
             {
@@ -445,7 +488,7 @@ namespace наследование_cш
                 MaxHeight = 10000;
                 HourFly = 0;
             }
-            public string toString()// функция вывода данных
+            public override string ToString()// функция вывода данных
             {
                 string plane;
                 plane = "Марка: " + name + "\n" + "Цвет: " + color + "\n" + "Год выпуска: "
