@@ -23,14 +23,22 @@ public:
 		return CodeError;
 	}
 };
-template<typename T> class GetSizeof
+template<typename T> class Sizeof// шаблон класса
 {
 private:
 	T value;
 public:
-	GetSizeof(T value)
+	Sizeof(T value)
 	{
 		this->value = value;
+	}
+	void SetValue(T value)
+	{
+		this->value = value;
+	}
+	T GetValue()
+	{
+		return value;
 	}
 	void DataTypeSize()
 	{
@@ -534,9 +542,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	engine dvs("св-01", 10, 100, 0, 400);
 	technika *tk = new technika(2020, "No_Name", "No_Color", 15000, 5);
 	cars *avto = new cars(dvs, 5, 2020, "No_Name", "No_Color", 1000, 8);
+	int a = 4;
+	Sizeof<int> size1(a);
+	size1.DataTypeSize();
 	tk->Zapravit();// вызов функции, вызывающей виртуальную функцию базового класса
 	*avto = *tk;// перегрузка оператора =
 	cout << *avto;
+	Sizeof<cars> size2(*avto);
+	size2.DataTypeSize();
 	bool f;
 	do{
 		f = false;
