@@ -227,14 +227,6 @@ namespace наследование_cш
             {
                 return new engine(name, weight, power, probeg, resurs);
             }
-            //public void Print()// вывод данных
-            //{
-            //    Console.WriteLine("Марка двигателя: " + name);
-            //    Console.WriteLine("Мощность двигателя: " + power);
-            //    Console.WriteLine("Пробег двигателя: " + probeg);
-            //    Console.WriteLine("Ресурс двигателя: " + resurs);
-            //    Console.WriteLine("Вес двигателя: " + weight);
-            //}
         };
         class technica:avtoShop, AZS
         {
@@ -310,6 +302,7 @@ namespace наследование_cш
                 this.year = yr;
                 this.price = pr;
                 this.petrol = pt;
+                this.count = co;
             }
             public technica()// конструктор без параметров
             {
