@@ -23,6 +23,24 @@ public:
 		return CodeError;
 	}
 };
+template<typename T> class GetSizeof
+{
+private:
+	T value;
+public:
+	GetSizeof(T value)
+	{
+		this->value = value;
+	}
+	void DataTypeSize()
+	{
+		cout << "Размер элемента: " << sizeof(value) << " байт" << endl;
+	}
+};
+
+
+
+
 
 class avtoshop// абстрактный класс
 {
